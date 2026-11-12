@@ -1,5 +1,14 @@
 const fs = require('fs');
-let s = fs.readFileSync('node_modules/rollup/dist/native.js', 'utf8');
-s = s.replace('const requireWithFriendlyError = id => {\n\ttry { return require("@rollup/wasm-node"); } catch (e) {}', 'const requireWithFriendlyError = id => {\n\ttry { return require("@rollup/wasm-node/dist/native.js"); } catch (e) {}');
-fs.writeFileSync('node_modules/rollup/dist/native.js', s);
-console.log('Updated rollup patch to @rollup/wasm-node/dist/native.js');
+const filePath = 'node_modules/rollup/dist/native.js';
+
+if (fs.existsSync(filePath)) {
+  let s = fs.readFileSync(filePath, 'utf8');
+  if (!s.includes('@rollup/wasm-node/dist/native.js')) {
+    s = s.replace(
+      'const requireWithFriendlyError = id => {',
+      'const requireWithFriendlyError = id => {\n\ttry { return require("@rollup/wasm-node/dist/native.js"); } catch (e) {}'
+    );
+    fs.writeFileSync(filePath, s);
+    console.log('Applied Rollup WASM compatibility patch.');
+  }
+}

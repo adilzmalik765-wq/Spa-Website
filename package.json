@@ -1,7 +1,6 @@
 {
   "name": "spa-website",
   "version": "1.0.0",
-  "main": "data_concerns.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
